@@ -155,7 +155,7 @@ export default function Home() {
 
   const placeBet = async () => {
     console.log("multi: ", multiplier);
-    setState(State.WAITING);
+    //setState(State.WAITING);
 
     if (
       (await token.methods.allowance(accounts[0], gameAddress).call()) <
