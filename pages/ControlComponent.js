@@ -155,7 +155,7 @@ function ControlComponent(props) {
                             {" "}
                             Winning Multiplier: {props.winningMultiplier}
                           </Text>
-                          <Text size="small">
+                          <Text size="small" textAlign="center">
                             {" "}
                             You will receive your prize within a few seconds.
                           </Text>
@@ -164,9 +164,7 @@ function ControlComponent(props) {
                       {props.multiplier.toString() !==
                         props.winningMultiplier && (
                         <>
-                          <Heading textAlign="center">
-                            This time you lost! :(
-                          </Heading>
+                          <Heading textAlign="center">You Lost!</Heading>
                           <Text size="medium">
                             Your Multiplier: {props.multiplier}
                           </Text>
