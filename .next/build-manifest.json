@@ -1,33 +1,61 @@
 {
   "polyfillFiles": [
-    "static/chunks/polyfills.js"
+    "static/chunks/polyfills-a40ef1678bae11e696dba45124eadd70.js"
   ],
-  "devFiles": [
-    "static/chunks/react-refresh.js"
-  ],
-  "ampDevFiles": [
-    "static/chunks/webpack.js",
-    "static/chunks/amp.js"
-  ],
+  "devFiles": [],
+  "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/development/_buildManifest.js",
-    "static/development/_ssgManifest.js"
+    "static/6Jb1d6wTde1U1bv69UFS5/_buildManifest.js",
+    "static/6Jb1d6wTde1U1bv69UFS5/_ssgManifest.js"
   ],
   "pages": {
     "/": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/index.js"
+      "static/chunks/webpack-483a2d4fb3ade84a5d64.js",
+      "static/chunks/framework-2f612445bd50b211f15a.js",
+      "static/chunks/main-e9e56cb8375c91859a75.js",
+      "static/chunks/999-3187df55f2e832ff5b21.js",
+      "static/chunks/889-f9104b281c616199b5ee.js",
+      "static/chunks/328-b1d6fccc207240507503.js",
+      "static/chunks/923-e27643772f0df0c42dbf.js",
+      "static/css/4dabb6de5cc293495479.css",
+      "static/chunks/pages/index-7d992d24d0aa371340e6.js"
+    ],
+    "/ConnectMetaMask": [
+      "static/chunks/webpack-483a2d4fb3ade84a5d64.js",
+      "static/chunks/framework-2f612445bd50b211f15a.js",
+      "static/chunks/main-e9e56cb8375c91859a75.js",
+      "static/chunks/999-3187df55f2e832ff5b21.js",
+      "static/chunks/pages/ConnectMetaMask-459399456203d6fb6ff4.js"
+    ],
+    "/ControlComponent": [
+      "static/chunks/webpack-483a2d4fb3ade84a5d64.js",
+      "static/chunks/framework-2f612445bd50b211f15a.js",
+      "static/chunks/main-e9e56cb8375c91859a75.js",
+      "static/chunks/999-3187df55f2e832ff5b21.js",
+      "static/chunks/889-f9104b281c616199b5ee.js",
+      "static/chunks/328-b1d6fccc207240507503.js",
+      "static/chunks/pages/ControlComponent-3623b7995a401c41c7a6.js"
+    ],
+    "/PlaceBet": [
+      "static/chunks/webpack-483a2d4fb3ade84a5d64.js",
+      "static/chunks/framework-2f612445bd50b211f15a.js",
+      "static/chunks/main-e9e56cb8375c91859a75.js",
+      "static/chunks/999-3187df55f2e832ff5b21.js",
+      "static/chunks/889-f9104b281c616199b5ee.js",
+      "static/chunks/pages/PlaceBet-bfc6062b94ccd39ca513.js"
     ],
     "/_app": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/_app.js"
+      "static/chunks/webpack-483a2d4fb3ade84a5d64.js",
+      "static/chunks/framework-2f612445bd50b211f15a.js",
+      "static/chunks/main-e9e56cb8375c91859a75.js",
+      "static/css/120f2e2270820d49a21f.css",
+      "static/chunks/pages/_app-0f6b82ef20dcd22cc210.js"
     ],
     "/_error": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/_error.js"
+      "static/chunks/webpack-483a2d4fb3ade84a5d64.js",
+      "static/chunks/framework-2f612445bd50b211f15a.js",
+      "static/chunks/main-e9e56cb8375c91859a75.js",
+      "static/chunks/pages/_error-ea939aab753d9e9db3bd.js"
     ]
   },
   "ampFirstPages": []
