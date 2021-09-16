@@ -97,7 +97,7 @@ function ControlComponent(props) {
                           </Text>
                           <Text size="small">
                             {" "}
-                            You'll receive your prize within a few seconds.
+                            You will receive your prize within a few seconds.
                           </Text>
                         </>
                       )}
@@ -134,7 +134,7 @@ function ControlComponent(props) {
                   )}
                   {props.placedBet === false && (
                     <>
-                      <Heading>You haven't placed bet!</Heading>
+                      <Heading>{"You have not placed bet!"}</Heading>
                       <Text size="medium">
                         Winning Multiplier: {props.winningMultiplier}
                       </Text>
