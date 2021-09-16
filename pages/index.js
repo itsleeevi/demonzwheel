@@ -155,27 +155,24 @@ export default function Home() {
 
   const placeBet = async () => {
     console.log("multi: ", multiplier);
-    setState(State.WAITING);
-    try {
-      if (
-        (await token.methods.allowance(accounts[0], gameAddress).call()) <
-        web3.utils.toWei(valueBet.toString(), "ether")
-      ) {
-        await token.methods
-          .approve(
-            gameAddress,
-            web3.utils.toWei(web3.utils.toBN(100000000000), "ether")
-          )
-          .send({ from: accounts[0], gas: 3000000 });
-      }
-      await contract.methods
-        .placeBet(web3.utils.toWei(valueBet.toString(), "ether"), multiplier)
-        .send({ from: accounts[0], gas: 3000000 });
+    //setState(State.WAITING);
 
-      setPlacedBet(true);
-    } catch (err) {
-      console.log(err);
+    if (
+      (await token.methods.allowance(accounts[0], gameAddress).call()) <
+      web3.utils.toWei(valueBet.toString(), "ether")
+    ) {
+      await token.methods
+        .approve(
+          gameAddress,
+          web3.utils.toWei(web3.utils.toBN(100000000000), "ether")
+        )
+        .send({ from: accounts[0], gas: 3000000 });
     }
+    await contract.methods
+      .placeBet(web3.utils.toWei(valueBet.toString(), "ether"), multiplier)
+      .send({ from: accounts[0], gas: 3000000 });
+
+    setPlacedBet(true);
   };
 
   async function send(web3, account, transaction) {
