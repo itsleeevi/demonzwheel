@@ -1,6 +1,11 @@
 {
+  "/ConnectMetaMask": "pages/ConnectMetaMask.html",
+  "/ControlComponent": "pages/ControlComponent.html",
+  "/PlaceBet": "pages/PlaceBet.html",
   "/_app": "pages/_app.js",
+  "/": "pages/index.html",
+  "/wheelComponent": "pages/wheelComponent.html",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js"
+  "/404": "pages/404.html"
 }
