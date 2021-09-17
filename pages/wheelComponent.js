@@ -11,16 +11,28 @@ import { ClientRequest } from "http";
 
 function WheelComponent() {
   const [show, setShow] = useState(false);
+  const [rotateValue, setRotateValue] = useState(4600);
   const animations = useSpring(
     show
       ? {
           from: { rotateZ: 0 },
-          to: { rotateZ: 3500 },
+          to: { rotateZ: rotateValue },
           config: { duration: 10000, easing: easings.easeQuadOut },
           reset: true,
         }
       : {}
   );
+
+  const segmentValues = {
+    12: 4400,
+    11: 3700,
+    10: 4100,
+    8: 3800,
+    5: 4250,
+    3: 3950,
+  };
+
+  console.log("deg:", rotateValue % 360);
 
   return (
     <>
