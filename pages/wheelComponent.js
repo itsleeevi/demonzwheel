@@ -17,6 +17,7 @@ function WheelComponent() {
           from: { rotateZ: 0 },
           to: { rotateZ: 3500 },
           config: { duration: 10000, easing: easings.easeQuadOut },
+          reset: true,
         }
       : {}
   );
@@ -30,7 +31,6 @@ function WheelComponent() {
               style={{
                 width: 390,
                 height: 390,
-
                 borderRadius: 16,
                 ...animations,
               }}
@@ -48,20 +48,20 @@ function WheelComponent() {
             </Box>
           </Stack>
         </Box>
-        <Button
-          alignSelf="center"
-          secondary
-          type="submit"
-          label={
-            <Text align="center" size="xlarge" color="#fff">
-              Spin!
-            </Text>
-          }
-          color="#9933FF"
-          onClick={() => {
-            setShow((show) => !show);
-          }}
-        />
+        <Box direction="row" gap="small" alignSelf="center">
+          <Button
+            alignSelf="center"
+            secondary
+            type="submit"
+            label={
+              <Text align="center" size="xlarge" color="#fff">
+                Spin!
+              </Text>
+            }
+            color="#9933FF"
+            onClick={() => setShow(!show)}
+          />
+        </Box>
       </Box>
     </>
   );
