@@ -11,8 +11,72 @@ import { deepMerge } from "grommet/utils";
 import Web3 from "web3";
 import Wheel from "../src/contracts/Wheel.json";
 import LLTH from "../src/contracts/LLTH.json";
-import { State, customTheme } from "./constants";
+
 import WheelComponent from "./wheelComponent.js";
+
+const State = {
+  NOTSTARTED: 0,
+  BETTING: 1,
+  WAITING: 2,
+  SPINNING: 3,
+  COMPLETED: 4,
+};
+
+const customTheme = {
+  rangeInput: {
+    thumb: { color: "#29112c" },
+    track: { color: "#fff" },
+  },
+  button: {
+    border: {
+      radius: "4px",
+    },
+    hover: {
+      color: "#81FCED",
+    },
+  },
+
+  global: {
+    font: {
+      family: "Silkscreen",
+    },
+    colors: {
+      border: "#29112C",
+      placeholder: "#fff",
+      text: "#fff",
+    },
+    focus: {
+      shadow: {
+        color: "#33FFFF",
+      },
+      border: {
+        color: "#9933FF",
+      },
+    },
+    elevation: {
+      light: {
+        large: "#9933FF",
+      },
+      dark: {
+        large: "#9933FF",
+      },
+    },
+    drop: {
+      background: "#29112C",
+      elevation: "large",
+      extend: `
+       
+            font-size: 14px;
+            border-bottom-left-radius: 1px;
+            border-bottom-right-radius: 1px;
+            li {
+              border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+            }
+            overflow: hidden;
+          `,
+    },
+  },
+};
 
 export default function Home() {
   const [valueBet, setValueBet] = useState(undefined);

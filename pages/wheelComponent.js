@@ -7,6 +7,7 @@ import "../styles/Home.module.css";
 import { useSpring, animated, Controller } from "react-spring";
 import * as easings from "d3-ease";
 import { useState } from "react";
+import { ClientRequest } from "http";
 
 function WheelComponent() {
   const [show, setShow] = useState(false);
@@ -27,14 +28,15 @@ function WheelComponent() {
           <Stack anchor="top">
             <animated.div
               style={{
+                width: 390,
+                height: 390,
+
+                borderRadius: 16,
                 ...animations,
               }}
             >
               <Image
                 className="wheel"
-                align="center"
-                alignSelf="center"
-                justify="center"
                 height="470px"
                 width="470px"
                 src={wheelImg}
