@@ -1,38 +1,52 @@
 import React, { useEffect } from "react";
 import wheelImg from "../styles/assets/wheel.png";
 import markerImg from "../styles/assets/marker.png";
-import { Box, Button, Text, Stack } from "grommet";
+import { Box, Stack } from "grommet";
 import Image from "next/image";
 import "../styles/Home.module.css";
-import { useSpring, animated, Controller } from "react-spring";
+import { useSpring, animated } from "react-spring";
 import * as easings from "d3-ease";
 import { useState } from "react";
-import { ClientRequest } from "http";
+import styled, { css } from "styled-components";
 
-function WheelComponent() {
-  const [show, setShow] = useState(false);
-  const [rotateValue, setRotateValue] = useState(4600);
+const WheelImage = styled(Image)`
+  ${({ value }) =>
+    value &&
+    `
+  filter: blur(1px);`}
+`;
+
+function timeout(delay) {
+  return new Promise((res) => setTimeout(res, delay));
+}
+const wait = async (props) => {
+  await timeout(1500);
+  props.setIsEnded(true);
+};
+
+function WheelComponent(props) {
   const animations = useSpring(
-    show
+    props.isSpinning
       ? {
           from: { rotateZ: 0 },
-          to: { rotateZ: rotateValue },
-          config: { duration: 10000, easing: easings.easeQuadOut },
+          to: { rotateZ: props.rotateValue },
+          config: {
+            mass: 10000,
+            duration: 15000,
+            easing: easings.easeQuadOut,
+          },
           reset: true,
+          onRest: () => {
+            props.setIsSpinning(false);
+            wait(props);
+          },
         }
       : {}
   );
 
-  const segmentValues = {
-    12: 4400,
-    11: 3700,
-    10: 4100,
-    8: 3800,
-    5: 4250,
-    3: 3950,
-  };
-
-  console.log("deg:", rotateValue % 360);
+  useEffect(() => {
+    console.log("winningMulti in wheelc: ", props.winningMultiplier);
+  }, []);
 
   return (
     <>
@@ -47,32 +61,29 @@ function WheelComponent() {
                 ...animations,
               }}
             >
-              <Image
-                className="wheel"
-                height="470px"
-                width="470px"
-                src={wheelImg}
-              />
+              <Box
+                animation={[
+                  { type: "zoomIn", duration: 450, size: "xlarge" },
+                  { type: "fadeIn", duration: 1000, size: "xlarge" },
+                ]}
+              >
+                <WheelImage
+                  value={props.isSpinning}
+                  src={wheelImg}
+                  width={500}
+                  height={500}
+                />
+              </Box>
             </animated.div>
 
-            <Box height="100px" width="40px" margin={{ top: "-20px" }}>
+            <Box
+              height="100px"
+              width="40px"
+              margin={{ top: "-20px", left: "10px" }}
+            >
               <Image className="marker" fit="cover" src={markerImg} />
             </Box>
           </Stack>
-        </Box>
-        <Box direction="row" gap="small" alignSelf="center">
-          <Button
-            alignSelf="center"
-            secondary
-            type="submit"
-            label={
-              <Text align="center" size="xlarge" color="#fff">
-                Spin!
-              </Text>
-            }
-            color="#9933FF"
-            onClick={() => setShow(!show)}
-          />
         </Box>
       </Box>
     </>

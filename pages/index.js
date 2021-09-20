@@ -1,9 +1,9 @@
 import { Box } from "grommet";
 import Head from "next/head";
-import Image from "next/image";
+
 import styles from "../styles/Home.module.css";
 import { useState, useEffect } from "react";
-import ControlComponent from "./ControlComponent";
+
 import { grommet } from "grommet/themes";
 import { Grommet, Heading } from "grommet";
 import "../styles/Home.module.css";
@@ -11,21 +11,27 @@ import { deepMerge } from "grommet/utils";
 import Web3 from "web3";
 import Wheel from "../src/contracts/Wheel.json";
 import LLTH from "../src/contracts/LLTH.json";
-
 import WheelComponent from "./wheelComponent.js";
 
-const State = {
-  NOTSTARTED: 0,
-  BETTING: 1,
-  WAITING: 2,
-  SPINNING: 3,
-  COMPLETED: 4,
-};
+import styled, { css } from "styled-components";
+
+import demonzface from "../styles/assets/demonzface.png";
+import TxModal from "./txModal";
+import UnderHeaderText from "./underHeaderText";
+import BottomButtons from "./bottomButtons";
+import ResultModal from "./resultModal";
 
 const customTheme = {
   rangeInput: {
-    thumb: { color: "#29112c" },
-    track: { color: "#fff" },
+    thumb: {
+      color: "#9933FF",
+      extend: `
+      border-radius: 0px;
+    `,
+    },
+    track: {
+      color: "#fff",
+    },
   },
   button: {
     border: {
@@ -37,11 +43,15 @@ const customTheme = {
   },
 
   global: {
+    hover: {
+      color: "#2D2102",
+    },
     font: {
-      family: "Silkscreen",
+      family: "MonoPixel-Awesome",
     },
     colors: {
-      border: "#29112C",
+      active: "#9832FE",
+      border: "#000",
       placeholder: "#fff",
       text: "#fff",
     },
@@ -50,22 +60,16 @@ const customTheme = {
         color: "#33FFFF",
       },
       border: {
-        color: "#9933FF",
+        color: "#000",
       },
     },
-    elevation: {
-      light: {
-        large: "#9933FF",
-      },
-      dark: {
-        large: "#9933FF",
-      },
-    },
+
     drop: {
-      background: "#29112C",
-      elevation: "large",
+      background: "#000",
+      elevation: "none",
+      hover: "#33FFFF",
       extend: `
-       
+
             font-size: 14px;
             border-bottom-left-radius: 1px;
             border-bottom-right-radius: 1px;
@@ -78,20 +82,63 @@ const customTheme = {
   },
 };
 
+const Container = styled.div``;
+
 export default function Home() {
   const [valueBet, setValueBet] = useState(undefined);
   const [multiplier, setMultiplier] = useState(2);
   const [winningMultiplier, setWinningMultiplier] = useState(undefined);
   const [connected, setConnected] = useState(false);
-  const [state, setState] = useState(State.BETTING);
   const [accounts, setAccounts] = useState([]);
   const [web3, setWeb3] = useState(undefined);
   const [contract, setContract] = useState(undefined);
   const [token, setToken] = useState(undefined);
   const [placedBet, setPlacedBet] = useState(false);
   const [owner, setOwner] = useState(undefined);
-  const gameAddress = "0xA583Cb798ebe0f9C98Fb270a7C39109AD1ca9Fd7";
-  const tokenAddress = "0xEf18BBAA98E55751c2983B976eB0540fe94E040D";
+  const [isTxModalOpen, setIsTxModalOpen] = useState(false);
+  const [txStarted, setTxStarted] = useState(false);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [isEnded, setIsEnded] = useState(false);
+  const [won, setWon] = useState(false);
+  const gameAddress = "0x1f98Ce22C20D42dF9b5770632D583fFFa668EC9D";
+  const tokenAddress = "0xBe9aA783395bEd56B1E33115141F485E35213c53";
+  const [reset, setReset] = useState(false);
+  const [rotateValue, setRotateValue] = useState(undefined);
+
+  const rotateValues = {
+    2: 4700, // 2, 3, ..., 12, 13 - segments
+    3: 3950,
+    4: 3550,
+    5: 4250,
+    6: 3500,
+    7: 3820,
+    8: 3800,
+    9: 3400,
+    10: 4100,
+    11: 3700,
+    12: 4400,
+    13: 3650,
+  };
+
+  const getWinningMulti = async () => {
+    if (contract !== undefined) {
+      await contract.methods
+        .winningMultiplierOf(accounts[0])
+        .call()
+        .then((result) => {
+          const res = Number(result);
+          //console.log("xo", getRotateValue(result));
+          setWinningMultiplier(res);
+
+          console.log("winningMultiplier1", res);
+          //console.log("segment1", segmentValues[Number(result)]);
+        });
+    }
+  };
+
+  const getRotateValue = (multiplier) => {
+    return rotateValues[multiplier - 2];
+  };
 
   useEffect(() => {
     const init = async () => {
@@ -99,6 +146,7 @@ export default function Home() {
         const balance = await token.methods.balanceOf(gameAddress).call();
         console.log("balance: ", balance);
       }
+      console.log("arrrr:", rotateValues[0]);
     };
 
     if (window.ethereum) {
@@ -115,13 +163,6 @@ export default function Home() {
     }
   }, []);
 
-  const connect = async () => {
-    const accs = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    setAccounts(accs);
-  };
-
   useEffect(() => {
     if (accounts !== undefined && accounts.length > 0) {
       setConnected(true);
@@ -131,36 +172,22 @@ export default function Home() {
   }, [accounts]);
 
   useEffect(() => {
-    if (placedBet) setState(State.SPINNING);
-  }, [placedBet]);
-
-  useEffect(() => {
-    if (state === State.BETTING) {
-      setPlacedBet(false);
-      setValueBet(undefined);
-      setWinningMultiplier(undefined);
-    } else if (state === State.SPINNING) {
-      const getWinningMultiplier = async () => {
-        const winningMultiplier = await contract.methods
-          .winningMultiplierOf(accounts[0])
-          .call();
-        setWinningMultiplier(winningMultiplier);
-      };
-      getWinningMultiplier();
-      const spinning = setTimeout(() => setState(State.COMPLETED), 5000);
-      return () => clearTimeout(spinning);
-    } else if (state === State.COMPLETED) {
-      const closeRound = async () => {
-        const tx = await contract.methods.closeRound(accounts[0]);
-        await send(web3, owner, tx);
-      };
-      closeRound();
-    }
-  }, [state]);
+    const closeRound = async () => {
+      const tx = await contract.methods.closeRound(accounts[0]);
+      await send(web3, owner, tx);
+    };
+    const init = async () => {
+      if (placedBet) {
+      } else if (isSpinning) {
+        await closeRound();
+      }
+    };
+    init();
+  }, [placedBet, isSpinning]);
 
   const placeBet = async () => {
     console.log("multi: ", multiplier);
-    //setState(State.WAITING);
+    setTxStarted(true);
 
     if (
       (await token.methods.allowance(accounts[0], gameAddress).call()) <
@@ -180,6 +207,26 @@ export default function Home() {
     setPlacedBet(true);
   };
 
+  useEffect(() => {
+    getWinningMulti();
+  }, [placedBet]);
+
+  useEffect(() => {
+    setRotateValue(rotateValues[winningMultiplier]);
+    if (multiplier === 2) {
+      console.log("multiplieeeer: ", multiplier);
+      setWon(true);
+    } else {
+      setWon(false);
+    }
+  }, [winningMultiplier]);
+
+  useEffect(() => {
+    console.log("rotateVAL: ", rotateValue);
+    setTxStarted(false);
+    setIsTxModalOpen(false);
+  }, [rotateValue]);
+
   async function send(web3, account, transaction) {
     const options = {
       to: transaction._parent._address,
@@ -195,32 +242,95 @@ export default function Home() {
   }
 
   return (
-    <Grommet
-      theme={deepMerge(grommet, customTheme)}
-      style={{
-        backgroundColor: "#000",
-      }}
-    >
-      <Head>
-        <title>Demonz Wheel</title>
-      </Head>
-      <div className={styles.container}>
-        <main className={styles.main}>
-          <Heading size="large" color="#fff">
-            Demonz Wheel
-          </Heading>
-
+    <Container>
+      <Grommet
+        theme={deepMerge(grommet, customTheme)}
+        style={{
+          backgroundColor: "#000",
+        }}
+      >
+        <Head>
+          <title>DEMONZ WHEEL</title>
+        </Head>
+        <div className={styles.container}>
+          <Box animation={{ type: "zoomOut", duration: 2000, size: "large" }}>
+            <Heading size="large" color="#fff">
+              DEMONZ WHEEL
+            </Heading>
+          </Box>
+          <Box animation={{ type: "fadeIn", duration: 1000, size: "xlarge" }}>
+            <UnderHeaderText
+              connected={connected}
+              placedBet={placedBet}
+              valueBet={valueBet}
+              multiplier={multiplier}
+            />
+          </Box>
           <div className={styles.grid}>
-            <Box direction="row" pad="medium">
-              <WheelComponent />
-            </Box>
-          </div>
-        </main>
+            <Box direction="column" pad="medium" gap="large">
+              <WheelComponent
+                key={reset}
+                isSpinning={isSpinning}
+                setIsSpinning={setIsSpinning}
+                setIsEnded={setIsEnded}
+                winningMultiplier={winningMultiplier}
+                rotateValue={rotateValue}
+              />
 
-        <footer className={styles.footer}>
-          <a href="https://cryptodemonz.com/">Powered by Crypto Demonz</a>
-        </footer>
-      </div>
-    </Grommet>
+              <Box
+                animation={{
+                  type: "zoomIn",
+                  duration: 1000,
+                  size: "xlarge",
+                }}
+              >
+                <BottomButtons
+                  placedBet={placedBet}
+                  connected={connected}
+                  setAccounts={setAccounts}
+                  setIsSpinning={setIsSpinning}
+                  setIsTxModalOpen={setIsTxModalOpen}
+                />
+              </Box>
+            </Box>
+            {isTxModalOpen && (
+              <TxModal
+                txStarted={txStarted}
+                valueBet={valueBet}
+                setValueBet={setValueBet}
+                multiplier={multiplier}
+                setMultiplier={setMultiplier}
+                connected={connected}
+                setConnected={setConnected}
+                placeBet={placeBet}
+                setTxStarted={setTxStarted}
+              />
+            )}
+
+            {isEnded && (
+              <ResultModal
+                setValueBet={setValueBet}
+                setMultiplier={setMultiplier}
+                setWinningMultiplier={setWinningMultiplier}
+                setPlacedBet={setPlacedBet}
+                setTxStarted={setTxStarted}
+                setIsEnded={setIsEnded}
+                won={won}
+                setWon={setWon}
+                valueBet={valueBet}
+                winningMultiplier={winningMultiplier}
+                reset={reset}
+                setReset={setReset}
+              />
+            )}
+          </div>
+          <Box animation={{ type: "fadeIn", duration: 1000, size: "xlarge" }}>
+            <footer className={styles.footer}>
+              <a href="https://cryptodemonz.com/">Powered by Crypto Demonz</a>
+            </footer>
+          </Box>
+        </div>
+      </Grommet>
+    </Container>
   );
 }

@@ -43,6 +43,11 @@ contract Wheel is Ownable {
     function winningMultiplierOf(address player) external view returns(uint256) {
         return _winningMultipliers[player];
     }
+
+    function betOf(address player) external view returns(uint256) {
+        return bets[player];
+    }
+    
     //-------------------------------------------------------------------------
     // SET FUNCTIONS
     //-------------------------------------------------------------------------
@@ -67,11 +72,11 @@ contract Wheel is Ownable {
          else if (randomNumber == 1) {
              randomNumber++;
          }
-        return randomNumber; // 2-25
+        return randomNumber; // 2-13
     }
 
     function getWinningMultiplier() internal view returns(uint256) {
-        return random(25);
+        return random(13);
     }
  
 
@@ -82,7 +87,7 @@ contract Wheel is Ownable {
     // Called by front-end when placing bet. It saves player's data and tranfers their bet for this contract. 
     function placeBet(uint256 bet, uint256 multiplier) external {
         require(multiplier > 1);
-        require(multiplier < 26);
+        require(multiplier < 24);
 
         bets[msg.sender] = bet;
         multipliers[msg.sender] = multiplier;   

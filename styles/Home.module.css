@@ -6,10 +6,11 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+ 
 }
  
 .main {
-  background-color: "#140A1F";
+  
 
   flex: 1;
   display: flex;
@@ -41,7 +42,7 @@
 }
  
 .grid {
-   
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,16 +52,11 @@
 }
 
 @font-face {
-  font-family: "Silkscreen";
-  src: local("Silkscreen"),
-    url("./fonts/slkscr.ttf") format("truetype");
+  font-family: "MonoPixel-Awesome";
+  src: local("MonoPixel-Awesome"),
+    url("./fonts/MonoPixel-Awesome.otf") format("opentype");
 }
-
-.App {
-  font-family: "Silkscreen";
-}
-
-
+ 
 
 .marker {
   position: absolute;
@@ -78,3 +74,6 @@
   margin: 0 auto;
   position: relative;
 }
+
+
+
