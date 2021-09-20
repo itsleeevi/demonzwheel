@@ -62,6 +62,7 @@ function ResultModal(props) {
             <Text textAlign="center" size="medium">
               TRY AGAIN!
             </Text>
+
             <Button
               alignSelf="center"
               secondary
@@ -96,6 +97,7 @@ function ResultModal(props) {
             <Text textAlign="center" size="small">
               YOU WILL RECEIVE YOUR PRIZE WITHIN A FEW SECONDS.
             </Text>
+
             <Button
               alignSelf="center"
               secondary

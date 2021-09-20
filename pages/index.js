@@ -100,8 +100,8 @@ export default function Home() {
   const [isSpinning, setIsSpinning] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
   const [won, setWon] = useState(false);
-  const gameAddress = "0x1f98Ce22C20D42dF9b5770632D583fFFa668EC9D";
-  const tokenAddress = "0xBe9aA783395bEd56B1E33115141F485E35213c53";
+  const gameAddress = "0x01f1D9A50833d4f4B95836b356b5c5C6192827C9";
+  const tokenAddress = "0xEf18BBAA98E55751c2983B976eB0540fe94E040D";
   const [reset, setReset] = useState(false);
   const [rotateValue, setRotateValue] = useState(undefined);
 
@@ -127,17 +127,9 @@ export default function Home() {
         .call()
         .then((result) => {
           const res = Number(result);
-          //console.log("xo", getRotateValue(result));
           setWinningMultiplier(res);
-
-          console.log("winningMultiplier1", res);
-          //console.log("segment1", segmentValues[Number(result)]);
         });
     }
-  };
-
-  const getRotateValue = (multiplier) => {
-    return rotateValues[multiplier - 2];
   };
 
   useEffect(() => {
@@ -146,7 +138,6 @@ export default function Home() {
         const balance = await token.methods.balanceOf(gameAddress).call();
         console.log("balance: ", balance);
       }
-      console.log("arrrr:", rotateValues[0]);
     };
 
     if (window.ethereum) {
@@ -213,8 +204,7 @@ export default function Home() {
 
   useEffect(() => {
     setRotateValue(rotateValues[winningMultiplier]);
-    if (multiplier === 2) {
-      console.log("multiplieeeer: ", multiplier);
+    if (multiplier === winningMultiplier) {
       setWon(true);
     } else {
       setWon(false);
@@ -222,7 +212,6 @@ export default function Home() {
   }, [winningMultiplier]);
 
   useEffect(() => {
-    console.log("rotateVAL: ", rotateValue);
     setTxStarted(false);
     setIsTxModalOpen(false);
   }, [rotateValue]);
@@ -290,6 +279,8 @@ export default function Home() {
                   setAccounts={setAccounts}
                   setIsSpinning={setIsSpinning}
                   setIsTxModalOpen={setIsTxModalOpen}
+                  isSpinning={isSpinning}
+                  isEnded={isEnded}
                 />
               </Box>
             </Box>

@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/Home.module.css";
-import { Button, Text } from "grommet";
+import { Button, Text, Box } from "grommet";
 
 function BottomButtons(props) {
   const connect = async () => {
@@ -13,18 +13,37 @@ function BottomButtons(props) {
   return (
     <>
       {props.placedBet ? (
-        <Button
-          alignSelf="center"
-          secondary
-          type="submit"
-          label={
-            <Text align="center" size="xlarge" color="#fff">
-              SPIN
-            </Text>
-          }
-          color="#9933FF"
-          onClick={() => props.setIsSpinning(true)}
-        />
+        <>
+          {!props.isSpinning && !props.isEnded ? (
+            <Box animation="pulse">
+              <Button
+                alignSelf="center"
+                secondary
+                type="submit"
+                label={
+                  <Text align="center" size="xlarge" color="#fff">
+                    SPIN
+                  </Text>
+                }
+                color="#9933FF"
+                onClick={() => props.setIsSpinning(true)}
+              />
+            </Box>
+          ) : (
+            <Button
+              alignSelf="center"
+              secondary
+              type="submit"
+              label={
+                <Text align="center" size="xlarge" color="#fff">
+                  SPIN
+                </Text>
+              }
+              color="#9933FF"
+              onClick={() => props.setIsSpinning(true)}
+            />
+          )}
+        </>
       ) : (
         <>
           {props.connected ? (
@@ -41,18 +60,20 @@ function BottomButtons(props) {
               onClick={() => props.setIsTxModalOpen(true)}
             />
           ) : (
-            <Button
-              secondary
-              alignSelf="center"
-              type="submit"
-              label={
-                <Text size="xlarge" color="#fff">
-                  CONNECT
-                </Text>
-              }
-              onClick={() => connect()}
-              color="#9933FF"
-            />
+            <Box animation="pulse">
+              <Button
+                secondary
+                alignSelf="center"
+                type="submit"
+                label={
+                  <Text size="xlarge" color="#fff">
+                    CONNECT
+                  </Text>
+                }
+                onClick={() => connect()}
+                color="#9933FF"
+              />{" "}
+            </Box>
           )}
         </>
       )}

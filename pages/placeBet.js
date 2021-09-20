@@ -66,6 +66,7 @@ export default function PlaceBet(props) {
           {props.multiplier + "x"}
         </Heading>
       </FormField>
+
       <Button
         alignSelf="center"
         secondary
