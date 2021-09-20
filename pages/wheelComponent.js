@@ -13,7 +13,8 @@ const WheelImage = styled(Image)`
   ${({ value }) =>
     value &&
     `
-  filter: blur(1px);`}
+  filter: blur(1px);
+ `}
 `;
 
 function timeout(delay) {
@@ -68,6 +69,7 @@ function WheelComponent(props) {
                 ]}
               >
                 <WheelImage
+                  className="wheelImg"
                   value={props.isSpinning}
                   src={wheelImg}
                   width={500}

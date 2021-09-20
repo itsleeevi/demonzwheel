@@ -5,6 +5,7 @@ import { Text } from "grommet";
 function UnderHeaderText(props) {
   return (
     <>
+      <br />
       {props.connected ? (
         <>
           {props.placedBet ? (
